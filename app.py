@@ -7,11 +7,9 @@ import tempfile
 import os
 import sys
 
-# Fix for Streamlit Cloud "ModuleNotFoundError: No module named 'src'"
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from src.processing import CervicalCellAnalyzer
-from src.ml_utils import load_classification_model, predict_cell_class
+# Imports flattened
+from processing import CervicalCellAnalyzer
+from ml_utils import load_classification_model, predict_cell_class
 
 st.set_page_config(page_title="Cervical Cell Classifier", layout="wide")
 

@@ -4,9 +4,9 @@ import cv2
 from pathlib import Path
 from tqdm import tqdm
 
-from src.utils import load_config, scan_images, create_output_dirs
-from src.processing import CervicalCellAnalyzer
-from src.visualization import plot_feature_distributions, plot_correlations
+from utils import load_config, scan_images, create_output_dirs
+from processing import CervicalCellAnalyzer
+from visualization import plot_feature_distributions, plot_correlations
 
 def main():
     parser = argparse.ArgumentParser(description="Cervical Cell Segmentation Pipeline")
