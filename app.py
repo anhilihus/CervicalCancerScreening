@@ -5,6 +5,10 @@ import pandas as pd
 from PIL import Image
 import tempfile
 import os
+import sys
+
+# Fix for Streamlit Cloud "ModuleNotFoundError: No module named 'src'"
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from src.processing import CervicalCellAnalyzer
 from src.ml_utils import load_classification_model, predict_cell_class
