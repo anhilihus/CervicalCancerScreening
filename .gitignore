@@ -3,7 +3,7 @@ __pycache__/
 .DS_Store
 .env
 Image_Dataset/
-output_results/
+
 test_results/
 plots/
 annotated_images/

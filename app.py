@@ -7,19 +7,44 @@ import tempfile
 import os
 import sys
 
+# Fix for Streamlit Cloud "ModuleNotFoundError: No module named 'src'"
+# (Not needed if flattened, but harmless)
+import sys
 # Imports flattened
 from processing import CervicalCellAnalyzer
 from ml_utils import load_classification_model, predict_cell_class
+# We import train_model to support server-side training
+from train_model import train_model
+import joblib
 
 st.set_page_config(page_title="Cervical Cell Classifier", layout="wide")
 
-st.title("🤖 AI Cervical Cancer Screening")
-st.markdown("Upload a Pap smear image. The AI will segment cells and classify them as **NILM, LSIL, HSIL, or Carcinoma**.")
+@st.cache_resource
+def get_model():
+    """Load model, or train it if missing/broken."""
+    model_path = "model.pkl"
+    
+    # Try loading
+    try:
+        if os.path.exists(model_path):
+            return joblib.load(model_path)
+    except Exception as e:
+        print(f"Model load failed ({e}). Retraining...")
+        pass
+        
+    # If we are here, we need to train
+    with st.spinner("⚠️ First time setup: Training AI Model... (this takes ~30s)"):
+        # Ensure training csv exists
+        import time
+        t_start = time.time()
+        train_model() # This saves to model.pkl
+        t_end = time.time()
+        st.success(f"Model trained in {t_end - t_start:.1f}s!")
+        return joblib.load(model_path)
 
-# Load Model
-model = load_classification_model("model.pkl")
-if model is None:
-    st.error("⚠️ Model not found! Please run `train_model.py` first.")
+model = get_model()
+
+st.title("🤖 AI Cervical Cancer Screening")
 
 # Config (Auto - No Sliders)
 config = {
